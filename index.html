@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voice Bill Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero-card">
+        <div class="hero-copy">
+          <p class="eyebrow">Smart Billing for Local Shops</p>
+          <h1>Turn messy voice notes into ready-to-use billing JSON.</h1>
+          <p class="hero-text">
+            Paste voice-to-text, speak directly into the app, and review a clean
+            bill with quantities, units, unit prices, subtotals, and grand
+            total.
+          </p>
+        </div>
+        <div class="hero-badge">
+          <span>Understands Bangla + English style entries</span>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel input-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Input</p>
+              <h2>Voice Text</h2>
+            </div>
+            <div class="status-pill" id="languageBadge">Language: Unknown</div>
+          </div>
+
+          <label class="field-label" for="voiceInput">Transcript</label>
+          <textarea
+            id="voiceInput"
+            rows="10"
+            placeholder="Example: 2kg alu 80 taka, 1 hali dim 55, milk 2 litre 180"
+          ></textarea>
+
+          <div class="button-row">
+            <button id="recordBtn" class="btn btn-secondary" type="button">
+              Start Voice Input
+            </button>
+            <button id="parseBtn" class="btn btn-primary" type="button">
+              Generate Bill
+            </button>
+            <button id="clearBtn" class="btn btn-ghost" type="button">
+              Clear
+            </button>
+          </div>
+
+          <p class="helper-text" id="voiceSupportText">
+            Speech recognition works in supported browsers such as Chrome.
+          </p>
+        </div>
+
+        <div class="panel result-panel">
+          <div class="panel-head">
+            <div>
+              <p class="panel-kicker">Result</p>
+              <h2>Billing Table</h2>
+            </div>
+            <div class="grand-total-chip" id="grandTotalDisplay">Grand Total: 0</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Qty</th>
+                  <th>Unit</th>
+                  <th>Price/Unit</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="billTableBody">
+                <tr class="empty-row">
+                  <td colspan="5">Your parsed items will appear here.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="json-head">
+            <div>
+              <p class="panel-kicker">Output</p>
+              <h2>JSON Array</h2>
+            </div>
+            <button id="copyBtn" class="btn btn-secondary" type="button">
+              Copy JSON
+            </button>
+          </div>
+          <pre id="jsonOutput">[]</pre>
+        </div>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
