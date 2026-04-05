@@ -10,21 +10,24 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <!-- Navigation Sidebar -->
-  <div class="nav-overlay" id="navOverlay"></div>
-  <nav class="app-nav" id="appNav">
-    <div class="nav-header">
-      <h2>Muktir Dokan</h2>
-      <button id="closeMenuBtn" class="close-menu-btn">×</button>
-    </div>
-    <ul class="nav-links">
-      <li><a href="index.html">Current Bill (Mic)</a></li>
-      <li><a href="history.html">Past Bills</a></li>
-      <li><a href="settings.html" class="active">Settings & Guide</a></li>
-    </ul>
-  </nav>
-
+  
+  <!-- Main Application Wrapper -->
   <div class="app-container">
+
+    <!-- Navigation Sidebar -->
+    <div class="nav-overlay" id="navOverlay"></div>
+    <nav class="app-nav" id="appNav">
+      <div class="nav-header">
+        <h2>Muktir Dokan</h2>
+        <button id="closeMenuBtn" class="close-menu-btn">×</button>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Current Bill (Mic)</a></li>
+        <li><a href="history.html">Past Bills</a></li>
+        <li><a href="settings.html" class="active">Settings & Guide</a></li>
+      </ul>
+    </nav>
+
     <header class="header" style="box-shadow: 0 4px 10px rgba(0,0,0,0.05); z-index: 5;">
       <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0;">
         <button id="menuBtn" style="background: none; border: none; cursor: pointer; padding: 4px;">
@@ -37,34 +40,102 @@
     <main class="page-content">
       
       <div class="settings-card">
-        <h3>Voice Language</h3>
+        <h3>Voice Language / ভাষা</h3>
         <div class="form-group">
-          <label for="languageSelect">Select primary language for speech recognition:</label>
+          <label for="languageSelect">Select primary language / আপনার ভাষা নির্বাচন করুন:</label>
           <select id="languageSelect" class="form-select">
             <option value="bn-BD">Bangla (bn-BD)</option>
             <option value="en-US">English (en-US)</option>
-            <option value="en-IN">English India (en-IN)</option>
           </select>
         </div>
       </div>
 
-      <div class="settings-card">
-        <h3>Best Result Tips 💡</h3>
-        <ul class="guide-list">
-          <li>Speak one item naturally: <strong>"চিনি ৩ কেজি প্রতি কেজি ৩০ টাকা"</strong>.</li>
-          <li>Pause slightly between items so the app can split them better.</li>
-          <li>Say quantity and price clearly for clothes, cosmetics, or mixed bills.</li>
-        </ul>
+      <!-- BANGLA GUIDE -->
+      <div id="guideBn" style="display: none;">
+        
+        <div class="chat-guide-wrapper">
+          <div class="chat-bubble user">
+            <div class="chat-label">🗣️ আপনি যেভাবে বলবেন (ঠিক)</div>
+            "চিনি ২ কেজি, ১০০ টাকা কেজি"
+          </div>
+          <div class="chat-bubble bot-success">
+            <div class="chat-label">🤖 সফটওয়্যার যা বুঝবে</div>
+            <div class="mock-row">
+              <span>চিনি</span>
+              <span>2 kg @ 100</span>
+              <span style="color: var(--primary);">৳200</span>
+            </div>
+          </div>
+          
+          <div class="chat-bubble user" style="margin-top: 12px; background: #64748b;">
+            <div class="chat-label">🗣️ ভুল পদ্ধতি ❌</div>
+            "ভাই আমাকে চিনি দেন ২ কেজি দাম রাখেন একশ..."
+          </div>
+          <div class="chat-bubble bot-error">
+            <div class="chat-label">❌ সফটওয়্যার বুঝতে ব্যর্থ হবে</div>
+            অতিরিক্ত শব্দ ব্যবহার করলে বিল আসবে না!
+          </div>
+        </div>
+
+        <div class="rule-cards">
+          <div class="rule-card">
+            <h4 style="color: var(--primary);">✅ ঠিক যেভাবে বলবেন</h4>
+            <p><strong>১. পরিষ্কার করে বলুন:</strong> "দুধ ৩ প্যাকেট ১২০ টাকা"।<br>
+            <strong>২. থেমে থেমে বলুন:</strong> এক আইটেম বলে একটু থামুন, সফটওয়্যার নিজে থেকেই নতুন লাইনে নেবে।<br>
+            <strong>৩. ওজনের হিসাব:</strong> "১ কেজি ৩০০ গ্রাম" বললে সফটওয়্যার নিজে থেকেই `1.3 kg` হিসাব করে নেবে।</p>
+          </div>
+          
+          <div class="rule-card danger">
+            <h4 style="color: var(--danger);">❌ যা বলবেন না</h4>
+            <p><strong>১. অতিরিক্ত কথা:</strong> "দাও", "দেন", "রাখেন" ইত্যাদি শব্দ বাদ দিন। শুধু আইটেম ও সংখ্যা বলুন।<br>
+            <strong>২. সব একসাথে বলা:</strong> "আলু২কেজিপেঁয়াজ৫কেজি" খুব দ্রুত বললে ক্যাপচার হবে না।</p>
+          </div>
+        </div>
+
       </div>
 
-      <div class="settings-card">
-        <h3>User Guide</h3>
-        <ul class="guide-list">
-          <li>Go to "Current Bill", tap the big green Mic button and dictate the bill.</li>
-          <li>The table updates live while you speak.</li>
-          <li>To remove a mistaken row, click the red '×' button on the row.</li>
-          <li>Once finished, press the Print button (Requires Bluetooth Printer app integration).</li>
-        </ul>
+      <!-- ENGLISH GUIDE -->
+      <div id="guideEn" style="display: none;">
+        
+        <div class="chat-guide-wrapper">
+          <div class="chat-bubble user">
+            <div class="chat-label">🗣️ How you speak (Perfect)</div>
+            "Sugar 2 kg, 100 taka kg"
+          </div>
+          <div class="chat-bubble bot-success">
+            <div class="chat-label">🤖 App creates</div>
+            <div class="mock-row">
+              <span>Sugar</span>
+              <span>2 kg @ 100</span>
+              <span style="color: var(--primary);">৳200</span>
+            </div>
+          </div>
+          
+          <div class="chat-bubble user" style="margin-top: 12px; background: #64748b;">
+            <div class="chat-label">🗣️ Wrong ❌</div>
+            "Brother give me sugar 2 kg and keep the price..."
+          </div>
+          <div class="chat-bubble bot-error">
+            <div class="chat-label">❌ App gets confused</div>
+            Too many extra conversational filler words!
+          </div>
+        </div>
+
+        <div class="rule-cards">
+          <div class="rule-card">
+            <h4 style="color: var(--primary);">✅ Do's</h4>
+            <p><strong>1. Speak the facts:</strong> "Milk 3 packets 120 taka".<br>
+            <strong>2. Pause between items:</strong> Speak an item, pause slightly, then speak the next.<br>
+            <strong>3. Metric Conversion:</strong> Say "1 kg 300 gram". The app registers `1.3 kg` automatically!</p>
+          </div>
+          
+          <div class="rule-card danger">
+            <h4 style="color: var(--danger);">❌ Don'ts</h4>
+            <p><strong>1. Using filler words:</strong> "Give me", "Keep it for". Avoid sentences. Think like a robot!<br>
+            <strong>2. Speaking too fast:</strong> "Potato2kgOnion5kg" will blend words and break the parser.</p>
+          </div>
+        </div>
+
       </div>
 
     </main>

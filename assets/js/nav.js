@@ -24,8 +24,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('voiceBillLanguage') || 'bn-BD';
     languageSelect.value = savedLang;
 
+    function applyGuideLang(lang) {
+       const guideBn = document.getElementById('guideBn');
+       const guideEn = document.getElementById('guideEn');
+       if(guideBn && guideEn) {
+          if (lang === 'bn-BD') {
+             guideBn.style.display = 'block';
+             guideEn.style.display = 'none';
+          } else {
+             guideBn.style.display = 'none';
+             guideEn.style.display = 'block';
+          }
+       }
+    }
+    
+    applyGuideLang(savedLang);
+
     languageSelect.addEventListener('change', (e) => {
-      localStorage.setItem('voiceBillLanguage', e.target.value);
+      const newLang = e.target.value;
+      localStorage.setItem('voiceBillLanguage', newLang);
+      applyGuideLang(newLang);
+      
+      // Update app.js parsing locale if global exists
+      if (typeof recognitionLanguage !== 'undefined') {
+         recognitionLanguage = newLang;
+      }
     });
   }
 });

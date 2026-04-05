@@ -10,21 +10,24 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <!-- Navigation Sidebar -->
-  <div class="nav-overlay" id="navOverlay"></div>
-  <nav class="app-nav" id="appNav">
-    <div class="nav-header">
-      <h2>Muktir Dokan</h2>
-      <button id="closeMenuBtn" class="close-menu-btn">×</button>
-    </div>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Current Bill (Mic)</a></li>
-      <li><a href="history.html">Past Bills</a></li>
-      <li><a href="settings.html">Settings & Guide</a></li>
-    </ul>
-  </nav>
 
+  <!-- Main Application Wrapper -->
   <div class="app-container">
+
+    <!-- Navigation Sidebar -->
+    <div class="nav-overlay" id="navOverlay"></div>
+    <nav class="app-nav" id="appNav">
+      <div class="nav-header">
+        <h2>Muktir Dokan</h2>
+        <button id="closeMenuBtn" class="close-menu-btn">×</button>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Current Bill (Mic)</a></li>
+        <li><a href="history.html">Past Bills</a></li>
+        <li><a href="settings.html">Settings & Guide</a></li>
+      </ul>
+    </nav>
+
     <header class="header">
       <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
         <button id="menuBtn" style="background: none; border: none; cursor: pointer; padding: 4px;">
@@ -51,53 +54,98 @@
         </div>
 
         <div id="memoList">
-          <!-- Placeholder row just to show structure -->
-          <div class="memo-row" id="placeholderRow" style="color: #94a3b8; font-weight: 400; text-align: center; display: block;">
-            Your items will appear here...
+          <!-- Placeholder Empty State for Non-Tech Users -->
+          <div id="placeholderRow" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; color: var(--text-muted);">
+            <div style="width: 64px; height: 64px; background: #e0f2fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: #0284c7;">
+              <svg style="width: 32px; height: 32px; fill: currentColor;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+            </div>
+            <h3 style="color: var(--text-main); font-size: 18px; margin-bottom: 8px;">Tap Mic to Start 🎙️</h3>
+            <p style="font-size: 14px; line-height: 1.5; margin-bottom: 12px;">নিচের সবুজ বাটনে চাপ দিয়ে আইটেম বলা শুরু করুন।</p>
+            <div style="background: white; border: 1px dashed #cbd5e1; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--primary);">
+               যেমন: "চিনি ২ কেজি ১০০ টাকা"
+            </div>
           </div>
         </div>
       </div>
     </main>
 
-    <footer class="action-footer" id="draftFooter">
-      <div class="secondary-actions">
-        <!-- Clear Draft -->
-        <button class="icon-btn" title="Discard Bill" id="clearBtn" style="color: #ef4444;">
-          <svg style="width:24px; height:24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-        </button>
+    <!-- Action Footer (Draft Mode) -->
+    <footer class="action-footer" id="draftFooter" style="flex-direction: column; padding: 24px 20px; border-radius: 24px 24px 0 0; align-items: center;">
+      <!-- Top Row: Draft Total -->
+      <div style="width: 100%; text-align: center; margin-bottom: 20px;">
+          <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Draft Total</div>
+          <div class="grand-total-amount" id="draftTotalAmount" style="font-size: 38px; color: var(--primary);">৳0</div>
       </div>
 
-      <div class="mic-container">
-        <button class="mic-target" id="recordBtn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+      <!-- Action Row: Discard | Mic | Finalize -->
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 340px; margin: 0 auto;">
+        
+        <!-- De-emphasized Discard Button -->
+        <button class="icon-btn" title="Discard Draft" id="clearBtn" style="display: flex; flex-direction: column; gap: 4px; width: 64px; height: 64px; border: none; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 600; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s, color 0.2s;">
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: #f8fafc; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+             <svg style="width: 20px; height: 20px; fill: var(--text-muted);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </div>
+          Discard
         </button>
-      </div>
 
-      <div class="grand-total-display">
-        <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Draft Total</div>
-        <div class="grand-total-amount" id="draftTotalAmount" style="font-size: 20px;">৳0</div>
-        <button id="finishBillBtn" style="background: var(--text-main); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 4px;">
-           Save &amp; Finish
+        <!-- Primary Action: Massive Perfect Circle Mic -->
+        <div class="mic-container" style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+          <button class="mic-target" id="recordBtn" style="flex-shrink: 0; width: 96px; height: 96px; min-width: 96px; border-radius: 50%; background: var(--primary); border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 12px 28px var(--primary-glow, rgba(16,185,129,0.4)); color: white; transition: transform 0.15s ease; margin: 0;">
+            <svg style="width: 44px; height: 44px; fill: currentColor; margin: 0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+          </button>
+          <span style="font-size: 14px; font-weight: 800; color: var(--primary); letter-spacing: 0.5px;">Tap to Speak</span>
+        </div>
+        
+        <!-- De-emphasized Finalize Button -->
+        <button id="finishBillBtn" style="display: flex; flex-direction: column; gap: 4px; width: 64px; height: 64px; border: none; background: transparent; color: var(--text-main); font-size: 11px; font-weight: 700; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.1s;">
+          <div style="width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+             <svg style="width: 20px; height: 20px; fill: var(--text-main);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          </div>
+          Finalize
         </button>
       </div>
     </footer>
 
     <!-- Shown only when Bill is Finished -->
-    <footer class="action-footer" id="lockedFooter" style="display: none; justify-content: space-between;">
-      <div class="secondary-actions" style="flex-direction: row;">
-        <!-- New Bill -->
-        <button class="icon-btn" title="New Bill" id="newBillBtn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-        <!-- Print -->
-        <button class="icon-btn" title="Print/Share" id="printBtn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-        </button>
+    <footer class="action-footer" id="lockedFooter" style="display: none; flex-direction: column; gap: 16px; padding: 20px;">
+      
+      <!-- Khata Ledger (Discount & Due) -->
+      <div style="display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 12px 16px; border-radius: 16px; border: 1px solid #e2e8f0; width: 100%;">
+         <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 14px; font-weight: 600; color: var(--text-main);">Discount (৳)</span>
+            <input type="number" id="discountInput" placeholder="0" style="width: 80px; text-align: right; padding: 6px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-family: inherit; font-size: 14px;">
+         </div>
+         <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 14px; font-weight: 600; color: var(--text-main);">Customer Paid (৳)</span>
+            <input type="number" id="paidInput" placeholder="0" style="width: 80px; text-align: right; padding: 6px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-family: inherit; font-size: 14px;">
+         </div>
+         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+            <span style="font-size: 15px; font-weight: 700; color: #ef4444;">Due Amount</span>
+            <span id="dueAmount" style="font-size: 18px; font-weight: 800; color: #ef4444;">৳0</span>
+         </div>
       </div>
 
-      <div class="grand-total-display" style="text-align: right;">
-        <span class="grand-total-label" style="font-size: 16px;">Final Bill</span>
-        <span class="grand-total-amount" id="finalTotalAmount" style="font-size: 42px; color: var(--primary);">৳0</span>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+        <div class="secondary-actions" style="flex-direction: row; gap: 8px;">
+          <!-- New Bill -->
+          <button class="icon-btn" title="New Bill" id="newBillBtn" style="border-radius: 12px;">
+            <svg style="width: 20px; height: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+          <!-- Copy Text -->
+          <button class="icon-btn" title="Copy Text" id="copyTextBtn" style="border-radius: 12px;">
+            <svg style="width: 20px; height: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          </button>
+          <!-- Print -->
+          <button class="icon-btn" title="Print/Share" id="printBtn" style="border-radius: 12px; color: var(--primary); background: #ecfdf5; border-color: #a7f3d0;">
+            <svg style="width: 20px; height: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+          </button>
+        </div>
+
+        <div class="grand-total-display" style="text-align: right;">
+          <span class="grand-total-label" style="font-size: 14px;">Payable (Final)</span>
+          <br>
+          <span class="grand-total-amount" id="finalTotalAmount" style="font-size: 34px; color: var(--primary);">৳0</span>
+        </div>
       </div>
     </footer>
   </div>
