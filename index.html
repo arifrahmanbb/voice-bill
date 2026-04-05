@@ -1,110 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Voice Bill Assistant</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <main class="app-shell">
-      <section class="hero-card">
-        <div class="hero-copy">
-          <p class="eyebrow">Smart Billing for Local Shops</p>
-          <h1>Turn messy voice notes into ready-to-use billing JSON.</h1>
-          <p class="hero-text">
-            Paste voice-to-text, speak directly into the app, and review a clean
-            bill with quantities, units, unit prices, subtotals, and grand
-            total.
-          </p>
-        </div>
-        <div class="hero-badge">
-          <span>Understands Bangla + English style entries</span>
-        </div>
-      </section>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muktir Dokan - Digital Memo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- Navigation Sidebar -->
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="app-nav" id="appNav">
+    <div class="nav-header">
+      <h2>Muktir Dokan</h2>
+      <button id="closeMenuBtn" class="close-menu-btn">×</button>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Current Bill (Mic)</a></li>
+      <li><a href="history.html">Past Bills</a></li>
+      <li><a href="settings.html">Settings & Guide</a></li>
+    </ul>
+  </nav>
 
-      <section class="workspace">
-        <div class="panel input-panel">
-          <div class="panel-head">
-            <div>
-              <p class="panel-kicker">Input</p>
-              <h2>Voice Text</h2>
-            </div>
-            <div class="status-pill" id="languageBadge">Language: Unknown</div>
-          </div>
+  <div class="app-container">
+    <header class="header">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+        <button id="menuBtn" style="background: none; border: none; cursor: pointer; padding: 4px;">
+          <svg style="width: 28px; height: 28px; fill: var(--text-main);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        <div class="header-title" style="margin-bottom: 0;">Bill #1024 • Today</div>
+      </div>
+      <div class="customer-input-group">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        <input type="tel" class="customer-input" placeholder="Customer Phone (017...)" autocomplete="off">
+      </div>
+    </header>
 
-          <label class="field-label" for="voiceInput">Transcript</label>
-          <textarea
-            id="voiceInput"
-            rows="10"
-            placeholder="Example: 2kg alu 80 taka, 1 hali dim 55, milk 2 litre 180"
-          ></textarea>
+    <div class="live-transcript" id="liveTranscript"></div>
 
-          <div class="button-row">
-            <button id="recordBtn" class="btn btn-secondary" type="button">
-              Start Voice Input
-            </button>
-            <button id="parseBtn" class="btn btn-primary" type="button">
-              Generate Bill
-            </button>
-            <button id="clearBtn" class="btn btn-ghost" type="button">
-              Clear
-            </button>
-          </div>
-
-          <p class="helper-text" id="voiceSupportText">
-            Speech recognition works in supported browsers such as Chrome.
-          </p>
+    <main class="memo-area">
+      <div class="cash-memo-sheet">
+        <div class="memo-header">
+          <div>ITEM</div>
+          <div class="col-center">QTY</div>
+          <div class="col-right">RATE</div>
+          <div class="col-right">TOTAL</div>
+          <div></div> <!-- space for delete btn -->
         </div>
 
-        <div class="panel result-panel">
-          <div class="panel-head">
-            <div>
-              <p class="panel-kicker">Result</p>
-              <h2>Billing Table</h2>
-            </div>
-            <div class="grand-total-chip" id="grandTotalDisplay">Grand Total: 0</div>
+        <div id="memoList">
+          <!-- Placeholder row just to show structure -->
+          <div class="memo-row" id="placeholderRow" style="color: #94a3b8; font-weight: 400; text-align: center; display: block;">
+            Your items will appear here...
           </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Qty</th>
-                  <th>Unit</th>
-                  <th>Price/Unit</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody id="billTableBody">
-                <tr class="empty-row">
-                  <td colspan="5">Your parsed items will appear here.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="json-head">
-            <div>
-              <p class="panel-kicker">Output</p>
-              <h2>JSON Array</h2>
-            </div>
-            <button id="copyBtn" class="btn btn-secondary" type="button">
-              Copy JSON
-            </button>
-          </div>
-          <pre id="jsonOutput">[]</pre>
         </div>
-      </section>
+      </div>
     </main>
 
-    <script src="./script.js"></script>
-  </body>
+    <footer class="action-footer" id="draftFooter">
+      <div class="secondary-actions">
+        <!-- Clear Draft -->
+        <button class="icon-btn" title="Discard Bill" id="clearBtn" style="color: #ef4444;">
+          <svg style="width:24px; height:24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.12-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        </button>
+      </div>
+
+      <div class="mic-container">
+        <button class="mic-target" id="recordBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+        </button>
+      </div>
+
+      <div class="grand-total-display">
+        <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Draft Total</div>
+        <div class="grand-total-amount" id="draftTotalAmount" style="font-size: 20px;">৳0</div>
+        <button id="finishBillBtn" style="background: var(--text-main); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 4px;">
+           Save &amp; Finish
+        </button>
+      </div>
+    </footer>
+
+    <!-- Shown only when Bill is Finished -->
+    <footer class="action-footer" id="lockedFooter" style="display: none; justify-content: space-between;">
+      <div class="secondary-actions" style="flex-direction: row;">
+        <!-- New Bill -->
+        <button class="icon-btn" title="New Bill" id="newBillBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+        <!-- Print -->
+        <button class="icon-btn" title="Print/Share" id="printBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+        </button>
+      </div>
+
+      <div class="grand-total-display" style="text-align: right;">
+        <span class="grand-total-label" style="font-size: 16px;">Final Bill</span>
+        <span class="grand-total-amount" id="finalTotalAmount" style="font-size: 42px; color: var(--primary);">৳0</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
 </html>

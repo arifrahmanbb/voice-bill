@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muktir Dokan - Past Bills</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .history-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bill-meta h4 {
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+    .bill-meta p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .bill-amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Sidebar -->
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="app-nav" id="appNav">
+    <div class="nav-header">
+      <h2>Muktir Dokan</h2>
+      <button id="closeMenuBtn" class="close-menu-btn">×</button>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Current Bill (Mic)</a></li>
+      <li><a href="history.html" class="active">Past Bills</a></li>
+      <li><a href="settings.html">Settings & Guide</a></li>
+    </ul>
+  </nav>
+
+  <div class="app-container">
+    <header class="header" style="box-shadow: 0 4px 10px rgba(0,0,0,0.05); z-index: 5;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0;">
+        <button id="menuBtn" style="background: none; border: none; cursor: pointer; padding: 4px;">
+          <svg style="width: 28px; height: 28px; fill: var(--text-main);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        <div class="header-title" style="margin-bottom: 0;">History</div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      
+      <div class="history-card">
+        <div class="bill-meta">
+          <h4>Bill #1023</h4>
+          <p>01711-XXXXXX • 10:30 AM</p>
+        </div>
+        <div class="bill-amount">৳450</div>
+      </div>
+
+      <div class="history-card">
+        <div class="bill-meta">
+          <h4>Bill #1022</h4>
+          <p>Walk-in Customer • Yesterday</p>
+        </div>
+        <div class="bill-amount">৳1,200</div>
+      </div>
+
+      <div class="history-card">
+        <div class="bill-meta">
+          <h4>Bill #1021</h4>
+          <p>Karim Chacha • Yesterday</p>
+        </div>
+        <div class="bill-amount">৳320</div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>
