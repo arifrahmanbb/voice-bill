@@ -77,7 +77,13 @@ const NUMBER_WORDS = {
   সতেরো: 17,
   আঠারো: 18,
   উনিশ: 19,
-  বিশ: 20
+  বিশ: 20,
+  দেড়: 1.5,
+  দেড়: 1.5,
+  আড়াই: 2.5,
+  আড়াই: 2.5,
+  সাড়ে: 0.5,
+  সাড়ে: 0.5
 };
 
 const PRICE_WORDS = new Set(["taka", "tk", "৳", "টাকা"]);
@@ -696,26 +702,26 @@ function buildItemsOnly(transcript) {
   const words = transcript.split(/\s+/);
   if (words.length < 2) return [];
 
-  const segments = splitIntoSegments(transcript);
+  const segments = splitSegments(transcript);
 
   return segments
     .map((itemStr) => {
       const item = parseSegment(itemStr);
       if (item && item.subtotal > 0 && item.product && item.product !== 'Unclear_Item') {
+         item.status = 'SUCCESS';
          return item;
       }
       
-      // Flash Error Message for Unclear Input
-      const liveTranscript = document.getElementById('liveTranscript');
-      if(liveTranscript) {
-         liveTranscript.innerHTML = `<span style="color: #ef4444; font-weight: 700;">⚠ Kotha Bujha Jayni (Math failed): "${itemStr}"</span>`;
-         setTimeout(() => { 
-            if(!isRecording) liveTranscript.innerHTML = ""; 
-         }, 3000);
-      }
-      return null;
+      // Failed input MUST be added to table with ERROR status
+      return {
+         product: itemStr || "Unclear",
+         quantity: 0,
+         unit: "-",
+         price_per_unit: 0,
+         subtotal: 0,
+         status: 'ERROR' // Explicitly requested by user template
+      };
     })
-    .filter((item) => item !== null);
 }
 
 function formatMoney(amount) {
@@ -745,7 +751,26 @@ function renderTable() {
   }
 
   if(memoList) {
-    const renderRow = (item, idx, isInterim) => `
+    const renderRow = (item, idx, isInterim) => {
+      if (item.status === 'ERROR') {
+         return `
+          <div class="memo-row ${isInterim ? 'interim-row' : ''}" id="row-${idx}" style="background: #fef2f2; border: 1px solid #fecaca;">
+            <div style="color: #ef4444; font-weight: 600;">⚠ ${escapeHtml(item.product)}</div>
+            <div class="col-center" style="font-size: 11px; color: #b91c1c; font-weight: 800; background: #fee2e2; padding: 4px 8px; border-radius: 4px;">ERROR</div>
+            <div class="col-right"></div>
+            <div style="display: flex; justify-content: flex-end; align-items: center;">
+               ${isInterim 
+                 ? '<div class="spinner"></div>' 
+                 : `<button class="delete-btn" onclick="removeItem(${idx})" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: transparent; color: #ef4444; border: none; cursor: pointer;">
+                     <svg style="width: 20px; height: 20px; fill: currentColor;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                   </button>`
+               }
+            </div>
+          </div>
+         `;
+      }
+      
+      return `
       <div class="memo-row ${isInterim ? 'interim-row' : ''}" id="row-${idx}">
         <div>${escapeHtml(item.product)}</div>
         <div class="col-center" style="font-size: 13px; color: var(--text-muted);">${escapeHtml(item.quantity)} ${escapeHtml(item.unit)}<br><span style="font-size: 10px;">@ ${escapeHtml(item.price_per_unit)}</span></div>
@@ -768,7 +793,7 @@ function renderTable() {
            }
         </div>
       </div>
-    `;
+    `};
 
     const globalHTML = globalCartItems.map((item, idx) => renderRow(item, idx, false)).join("");
     const interimHTML = interimCartItems.map((item, idx) => renderRow(item, globalCartItems.length + idx, true)).join("");
@@ -892,6 +917,9 @@ if(copyTextBtn) {
   });
 }
 
+// Removed Manual Keyboard Entry Logic
+
+
 function clearAll() {
   globalCartItems = [];
   interimCartItems = [];
@@ -921,10 +949,7 @@ function setupSpeechRecognition() {
   recognition.onend = () => {
     isRecording = false;
     if(recordBtn) recordBtn.classList.remove('listening');
-    if(liveTranscript) {
-      setTimeout(() => { liveTranscript.textContent = ""; }, 1500);
-    }
-    // Commit the interim items formally when pause happens
+    // Commit the interim items formally when pause/stop happens (Fallback for stuck browsers)
     if (interimCartItems.length > 0) {
       globalCartItems.push(...interimCartItems);
       interimCartItems = [];
@@ -946,7 +971,27 @@ function setupSpeechRecognition() {
 
     if (finalTranscript.trim() !== '') {
        const finalItems = buildItemsOnly(finalTranscript);
-       globalCartItems.push(...finalItems);
+       
+       // Handle aggregate redundancy (avoid duplicate text rows)
+       finalItems.forEach(newItem => {
+         if (newItem.status === 'ERROR') {
+            globalCartItems.push(newItem);
+            return;
+         }
+         
+         const existingItem = globalCartItems.find(i => 
+           i.product === newItem.product && 
+           i.price_per_unit === newItem.price_per_unit && 
+           i.status !== 'ERROR'
+         );
+         
+         if (existingItem) {
+           existingItem.quantity += newItem.quantity;
+           existingItem.subtotal += newItem.subtotal;
+         } else {
+           globalCartItems.push(newItem);
+         }
+       });
     }
 
     if (interimTranscript.trim() !== '') {
@@ -962,7 +1007,7 @@ function setupSpeechRecognition() {
   recognition.onerror = () => {
     isRecording = false;
     if(recordBtn) recordBtn.classList.remove('listening');
-    if(liveTranscript) liveTranscript.textContent = "Kotha shunte paini. Abar balun.";
+    if(liveTranscript) liveTranscript.textContent = "ভয়েস পরিষ্কার নয়। আবার বলুন।";
   };
 }
 
@@ -974,6 +1019,7 @@ if(recordBtn) recordBtn.addEventListener("click", () => {
     return;
   }
 
+  // Toggle functionality: Stop if running, Start if stopped
   if (isRecording) {
     recognition.stop();
   } else {
